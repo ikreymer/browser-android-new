@@ -15,7 +15,6 @@ RUN apt-get update && \
 
 # Install android tools + sdk
 ARG SDK_BASE=https://dl.google.com/android/repository/tools_r25.2.5-linux.zip
-ARG SDK_VERS=25
 
 ENV ANDROID_HOME /opt/android-sdk-linux
 ENV PATH $PATH:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools
@@ -38,15 +37,22 @@ RUN mkdir $ANDROID_HOME/licenses
 RUN echo 8933bad161af4178b1185d1a37fbf41ea5269c55 > $ANDROID_HOME/licenses/android-sdk-license
 RUN echo 84831b9409646a918e30573bab4c9c91346d8abd > $ANDROID_HOME/licenses/android-sdk-preview-license
 
+ARG SDK_VERS=25
+ARG ANDROID_ARCH=x86_64
+
 RUN sdkmanager "tools" "platforms;android-$SDK_VERS" "emulator"
 
-RUN sdkmanager --verbose "system-images;android-$SDK_VERS;google_apis;x86_64"
+RUN sdkmanager --verbose "system-images;android-$SDK_VERS;google_apis;$ANDROID_ARCH"
 
-RUN echo n | android create avd --force -n "x86_64" -k "system-images;android-$SDK_VERS;google_apis;x86_64" --tag google_apis
+RUN echo n | android create avd --force -n "$ANDROID_ARCH" -k "system-images;android-$SDK_VERS;google_apis;$ANDROID_ARCH" --tag google_apis
 
 # Add entrypoint
 ADD run.sh /app/run.sh
 ADD addcert.sh /app/addcert.sh
+ADD layout $ANDROID_HOME/platforms/android-$SDK_VERS/skins/WVGA800/layout
+
+ENV ANDROID_ARCH $ANDROID_ARCH
+ENV SDK_VERS $SDK_VERS
 
 CMD /app/entry_point.sh /app/run.sh
 
