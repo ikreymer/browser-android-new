@@ -31,7 +31,6 @@ RUN curl "$SDK_BASE" > /tmp/sdk.zip && unzip /tmp/sdk.zip -d /opt/android-sdk-li
 RUN mkdir -m 0750 /.android
 
 RUN sdkmanager --update
-RUN sdkmanager --list
 
 RUN mkdir $ANDROID_HOME/licenses
 RUN echo 8933bad161af4178b1185d1a37fbf41ea5269c55 > $ANDROID_HOME/licenses/android-sdk-license
@@ -44,16 +43,20 @@ RUN sdkmanager "tools" "platforms;android-$SDK_VERS" "emulator"
 
 RUN sdkmanager --verbose "system-images;android-$SDK_VERS;google_apis;$ANDROID_ARCH"
 
-RUN echo n | android create avd --force -n "$ANDROID_ARCH" -k "system-images;android-$SDK_VERS;google_apis;$ANDROID_ARCH" --tag google_apis
+RUN echo n | avdmanager --verbose create avd --force -n "$ANDROID_ARCH" -k "system-images;android-$SDK_VERS;google_apis;$ANDROID_ARCH" --tag google_apis
 
 # Add entrypoint
-ADD run.sh /app/run.sh
 ADD addcert.sh /app/addcert.sh
 ADD layout $ANDROID_HOME/platforms/android-$SDK_VERS/skins/WVGA800/layout
+ADD jwmrc /root/.jwmrc
 
 ENV ANDROID_ARCH $ANDROID_ARCH
 ENV SDK_VERS $SDK_VERS
 
+# qemu tools for snapshot
+RUN apt-get update && apt-get install -qqy qemu-utils
+
+ADD run.sh /app/run.sh
 CMD /app/entry_point.sh /app/run.sh
 
 
