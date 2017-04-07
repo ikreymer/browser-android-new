@@ -54,7 +54,7 @@ ENV ANDROID_ARCH $ANDROID_ARCH
 ENV SDK_VERS $SDK_VERS
 
 # qemu tools for snapshot
-RUN apt-get update && apt-get install -qqy qemu-utils
+#RUN apt-get update && apt-get install -qqy qemu-utils
 
 ADD run.sh /app/run.sh
 CMD /app/entry_point.sh /app/run.sh

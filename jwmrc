@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <JWM>
    <Group>
-      <Name>.*</Name>
-      <Option>notitle</Option>
-      <Option>noborder</Option>
+      <!--<Option>notitle</Option>
+      <Option>noborder</Option>-->
+      <Option>centered</Option>
    </Group>
    <WindowStyle>
       <Font>-*-fixed-*-r-*-*-10-*-*-*-*-*-*-*</Font>

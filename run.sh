@@ -13,13 +13,13 @@ PATH=$PATH:${ANDROID_HOME}/tools:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emul
 echo "hw.keyboard = yes" >> ~/.android/avd/${android_arch}.avd/config.ini
 echo "vm.heapSize = 384" >> ~/.android/avd/${android_arch}.avd/config.ini
 
-echo "snapshot.present=true" >> ~/.android/avd/${android_arch}.avd/config.ini
+#echo "snapshot.present=true" >> ~/.android/avd/${android_arch}.avd/config.ini
 
-qemu-img create -f qcow2 -o compat=0.10 ~/.android/avd/${android_arch}.avd/snapshots.img 1G
+#qemu-img create -f qcow2 -o compat=0.10 ~/.android/avd/${android_arch}.avd/snapshots.img 1G
 
 # Force centering
-echo "window.x=-10" >> ~/.android/avd/${android_arch}.avd/emulator-user.ini
-echo "window.y=-10" >> ~/.android/avd/${android_arch}.avd/emulator-user.ini
+#echo "window.x=-10" >> ~/.android/avd/${android_arch}.avd/emulator-user.ini
+#echo "window.y=-10" >> ~/.android/avd/${android_arch}.avd/emulator-user.ini
 
 export LD_LIBRARY_PATH="$ANDROID_HOME/tools/lib64/:$LD_LIBRARY_PATH"
 export LD_LIBRARY_PATH="$ANDROID_HOME/emulator/lib64/:$LD_LIBRARY_PATH"
@@ -32,7 +32,7 @@ export LD_LIBRARY_PATH="$ANDROID_HOME/emulator/lib64/qt/lib/:$LD_LIBRARY_PATH"
 run_browser emulator64-x86 -avd ${android_arch} -writable-system -noaudio -accel on -gpu off \
 			   -prop "status.battery.level_raw=100" -verbose -memory 2048 \
 			   -skindir $ANDROID_HOME/platforms/android-$SDK_VERS/skins/ -skin WVGA800 \
-			   -selinux permissive -snapshot emu -qemu  &
+			   -selinux permissive -fixed-scale &
 
 PID=$!
 
